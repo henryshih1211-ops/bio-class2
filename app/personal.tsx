@@ -3,14 +3,16 @@ import { useEffect, useState } from 'react';
 import { CheckCheck, Link2, ArrowUpRight, Plus } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Empty } from '@/components/ui/empty';
+import type { PersonalSummary } from './mobile-profile';
 type Task={id:string;title:string;due:string;done:boolean};
 type Link={id:string;title:string;url:string};
 const KEY='shengke2-personal-v1';
 export function safeUrl(value:string){try {const url=new URL(value);return ['http:','https:'].includes(url.protocol)&&!url.username&&!url.password?url.href:null;}catch{return null;}}
-export default function Personal(){
+export default function Personal({onSummaryChange}:{onSummaryChange:(summary:PersonalSummary)=>void}){
  const [tasks,setTasks]=useState<Task[]>([]),[links,setLinks]=useState<Link[]>([]);
  const [ready,setReady]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  const [title,setTitle]=useState(''),[due,setDue]=useState(''),[linkTitle,setLinkTitle]=useState(''),[url,setUrl]=useState('');
+ useEffect(()=>{if(ready)onSummaryChange({pending:tasks.filter(t=>!t.done).length,completed:tasks.filter(t=>t.done).length,links:links.length});},[tasks,links,ready,onSummaryChange]);
  useEffect(()=>{try{const raw=localStorage.getItem(KEY);if(raw){const data=JSON.parse(raw);if(!Array.isArray(data.tasks)||!Array.isArray(data.links)||!data.tasks.every((t:Task)=>typeof t.id==='string'&&typeof t.title==='string'&&typeof t.due==='string'&&typeof t.done==='boolean')||!data.links.every((l:Link)=>typeof l.id==='string'&&typeof l.title==='string'&&typeof l.url==='string'&&safeUrl(l.url)))throw Error();setTasks(data.tasks);setLinks(data.links);}setReady(true);}catch{setError('无法读取本地记录。为保护原有内容，暂不覆盖保存；请检查浏览器的存储设置。');}},[]);
  function save(nextTasks:Task[],nextLinks:Link[]){try{localStorage.setItem(KEY,JSON.stringify({tasks:nextTasks,links:nextLinks}));setTasks(nextTasks);setLinks(nextLinks);setError('');return true;}catch{setError('保存失败，浏览器存储可能已满或被禁用。请保留输入内容后重试。');return false;}}
  return <section id="personal" className="personal-area" aria-label="个人工作区"><div className="personal-heading"><h2>我的工作区</h2><p>仅保存在当前浏览器 · 不向全班发布 · 换设备不会同步</p></div>

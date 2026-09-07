@@ -13,7 +13,7 @@ export default function MobileNav() {
   const [active, setActive] = useState('#schedule');
 
   useEffect(() => {
-    const syncHash = () => setActive(items.some((item) => item.href === window.location.hash) ? window.location.hash : '#schedule');
+    const syncHash = () => setActive(window.location.hash === '#resources' ? '#tasks' : items.some((item) => item.href === window.location.hash) ? window.location.hash : '#schedule');
     syncHash();
     window.addEventListener('hashchange', syncHash);
     return () => window.removeEventListener('hashchange', syncHash);
@@ -22,7 +22,7 @@ export default function MobileNav() {
   return (
     <nav className="mobile-nav" aria-label="手机端快捷导航">
       {items.map(({ href, label, icon: Icon }) => (
-        <a key={href} href={href} className={`mobile-nav-item${active === href ? ' active' : ''}`} onClick={() => setActive(href)}>
+        <a key={href} href={href} aria-current={active === href ? 'page' : undefined} className={`mobile-nav-item${active === href ? ' active' : ''}`} onClick={() => setActive(href)}>
           <Icon size={20} strokeWidth={1.8} />
           <span>{label}</span>
         </a>
