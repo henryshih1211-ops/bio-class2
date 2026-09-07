@@ -7,6 +7,7 @@ import { Empty } from '@/components/ui/empty';
 import Personal from './personal';
 import PwaInstaller from './pwa-installer';
 import MobileNav from './mobile-nav';
+import MobileProfile from './mobile-profile';
 import { flushSync } from 'react-dom';
 import { registerWeekTool } from '@/lib/webmcp';
 
@@ -26,6 +27,7 @@ export default function Home() {
       <div className="schedule-note"><Info size={17}/><p>英语：周三7–8节、周五3–4节；体育：周四3–4节。分班、周次及地点待确认，未计入上方课表。节次对应的钟点时间尚未提供。</p></div>
     </section><aside className="side"><section className="panel note-panel"><p className="eyebrow">学期备忘</p><h2>开学前，先看这里</h2><div className="memo"><span>01</span><div><h3>第2—3周 · 军事训练</h3><p>具体集合安排以学校通知为准。</p></div></div><div className="memo"><span>02</span><div><h3>第4周 · 固定课程开始</h3><p>劳动教育只安排在周五第5节。</p></div></div><div className="memo"><span>03</span><div><h3>部分课程按周变化</h3><p>切换周次查看，避免把整个学期的课程当成每周都有。</p></div></div></section><section className="panel provenance"><h2>关于这份课表</h2><p>仅包含二班相关课程，保留二班参与的合班课。未收录姓名名单、学号或团员证件。</p><p className="muted">依据你提供的学校课表整理。调课与临时安排以学校最新通知为准。</p><div className="data-label">27条排课记录 · 含3条待定板块与1条军训</div></section></aside></div>
     <Personal/>
+    <MobileProfile />
     <footer>生科2班 · 本周<span>班级小站 / 第一版</span></footer>
     <MobileNav />
   </main>;
