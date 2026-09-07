@@ -1,0 +1,19 @@
+{
+  "name": "生科2班 · 本周",
+  "short_name": "生科2班",
+  "description": "26级生物科学类2班的每周课表与班级小工具。",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f7fa",
+  "theme_color": "#006e63",
+  "icons": [
+    {
+      "src": "app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
