@@ -1,20 +1,32 @@
-const VERSION = 'bio-class2-pwa-v1';
+const VERSION = 'bio-class2-pwa-v2';
 const root = new URL('./', self.location).pathname;
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(VERSION).then((cache) =>
-      cache.addAll([root, `${root}index.html`, `${root}manifest.webmanifest`]),
-    ),
+    caches
+      .open(VERSION)
+      .then((cache) =>
+        cache.addAll([
+          root,
+          `${root}index.html`,
+          `${root}manifest.webmanifest`,
+        ]),
+      ),
   );
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key.startsWith('bio-class2-') && key !== VERSION).map((key) => caches.delete(key))),
-    ),
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter((key) => key.startsWith('bio-class2-') && key !== VERSION)
+            .map((key) => caches.delete(key)),
+        ),
+      ),
   );
   self.clients.claim();
 });
@@ -28,6 +40,10 @@ self.addEventListener('fetch', (event) => {
         caches.open(VERSION).then((cache) => cache.put(event.request, copy));
         return response;
       })
-      .catch(() => caches.match(event.request).then((cached) => cached || caches.match(root))),
+      .catch(() =>
+        caches
+          .match(event.request)
+          .then((cached) => cached || caches.match(root)),
+      ),
   );
 });
