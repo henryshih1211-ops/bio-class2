@@ -4,7 +4,7 @@ import { CheckCheck, Link2, ArrowUpRight, Plus } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Empty } from '@/components/ui/empty';
 import type { PersonalSummary } from './mobile-profile';
-import ClassHomework from './class-homework';
+import SharedBoard from './shared-board';
 type Task = { id: string; title: string; due: string; done: boolean };
 type Link = { id: string; title: string; url: string };
 const KEY = 'shengke2-personal-v1';
@@ -211,14 +211,7 @@ export default function Personal({
                 </button>
               </div>
             </form>
-            <section className="mobile-class-todos" aria-label="班级待办">
-              <div>
-                <p className="eyebrow">班级待办</p>
-                <h3>班级任务</h3>
-              </div>
-              <p>班委后续发布的班级待办，会统一显示在这里。</p>
-            </section>
-            <ClassHomework />
+            <SharedBoard />
           </div>
         </section>
         <section id="resources" className="panel personal-panel">
