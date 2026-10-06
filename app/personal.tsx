@@ -190,7 +190,7 @@ export default function Personal({
                 maxLength={160}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="例如：确认英语分班安排"
+                placeholder="例如：完成大学英语预习"
                 required
               />
               <div className="form-bottom">
