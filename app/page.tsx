@@ -8,7 +8,7 @@ import {
   BookOpen,
   Info,
 } from 'lucide-react';
-import { activeCourses, weekDate, currentWeek } from '@/lib/courses';
+import { activeCourses, weekDate, currentWeek, courseTime } from '@/lib/courses';
 import {
   Select,
   SelectContent,
@@ -104,6 +104,7 @@ export default function Home() {
               <p className="muted">
                 {weekDate(week)} — {weekDate(week, 6)}
               </p>
+              <p className="schedule-season">冬季作息 · 10月1日—4月30日</p>
             </div>
             <div className="week-controls">
               <button
@@ -183,6 +184,7 @@ export default function Home() {
                             </span>
                             {c.odd && <span>单周</span>}
                           </div>
+                          <p className="course-time">{courseTime(c.start, c.end)}</p>
                           <h4>{c.name}</h4>
                           <p>{c.room}</p>
                           <p className="teacher">{c.teacher}</p>
@@ -199,7 +201,7 @@ export default function Home() {
           <div className="schedule-note">
             <Info size={17} />
             <p>
-              英语已计入课表：第4—19周，周三7–8节为单周视听说，周五3–4节为每周读写，均在综合楼A303。体育：周四3–4节，分班、周次及地点仍待确认。节次对应的钟点时间尚未提供。
+              英语已计入课表：第4—19周，周三7–8节为单周视听说，周五3–4节为每周读写，均在综合楼A303。体育：周四3–4节（10:00–11:40），分班、周次及地点仍待确认。课表时间按冬季作息显示，预备铃为7:50、13:50、18:50。
             </p>
           </div>
         </section>

@@ -1,5 +1,18 @@
 export type Course = {id:string;name:string;day:number;start:number;end:number;from:number;to:number;room:string;teacher:string;odd:boolean;weeks?:number[];kind:string};
 type Row = [string,number,number,number,number,number,string,string,boolean?,number[]?];
+// 廊坊师范学院冬季作息：10月1日至次年4月30日。
+export const winterPeriods = [
+  ['08:00', '08:45'], ['08:55', '09:40'],
+  ['10:00', '10:45'], ['10:55', '11:40'],
+  ['14:00', '14:45'], ['14:55', '15:40'],
+  ['16:00', '16:45'], ['16:55', '17:40'],
+  ['19:00', '19:45'], ['19:55', '20:40'],
+] as const;
+export function courseTime(start:number,end:number){
+  const first = winterPeriods[start - 1];
+  const last = winterPeriods[end - 1];
+  return first && last ? `${first[0]}–${last[1]}` : '';
+}
 const rows: Row[] = [
 ['国家安全教育',1,1,2,4,11,'笃行楼1教室','刘娟'],
 ['有机化学',1,1,2,13,16,'综合楼A314','李美茹'],

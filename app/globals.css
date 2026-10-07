@@ -601,6 +601,18 @@ h1 {
   font-size: 14px;
   line-height: 1.6;
 }
+.course .course-time {
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #425866;
+  margin-bottom: 6px;
+}
+.schedule-season {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  margin-top: 4px;
+}
 .teacher {
   color: #546972;
 }
