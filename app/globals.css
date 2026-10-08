@@ -530,6 +530,12 @@ h1 {
   gap: 10px;
   padding: 0 18px 20px;
 }
+.mobile-timetable { display: none; }
+.timetable-detail { max-height: 85svh; overflow-y: auto; }
+.timetable-detail dl { display: grid; gap: 14px; }
+.timetable-detail dl > div { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; }
+.timetable-detail dt { color: var(--muted-foreground); }
+.timetable-detail dd { margin: 0; overflow-wrap: anywhere; }
 .day {
   min-width: 0;
 }
@@ -583,6 +589,7 @@ h1 {
   border-color: #9a7bcd;
   background: #f3eff9;
 }
+.course.sport { border-color: #bb8b40; background: #fff5de; }
 .course-meta {
   display: flex;
   justify-content: space-between;
@@ -744,11 +751,54 @@ footer {
   }
   .weekbar {
     padding: 14px 16px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
   }
+  .weekbar > div:first-child { display: contents; }
+  .weekbar .week-title { grid-column: 1; grid-row: 1; align-self: center; }
+  .weekbar .week-controls { grid-column: 2; grid-row: 1; }
+  .weekbar .muted { grid-column: 1 / -1; grid-row: 2; }
+  .weekbar .schedule-season { grid-column: 1 / -1; grid-row: 3; margin-top: -4px; }
   .days {
-    display: block;
-    padding: 0 16px 16px;
+    display: none;
   }
+  .mobile-timetable { display: block; padding: 0 7px 12px; }
+  .timetable-hint { margin: 0 4px 10px; font-size: 11px; color: var(--muted-foreground); }
+  .timetable-grid {
+    display: grid;
+    grid-template-columns: 34px repeat(5, minmax(0, 1fr));
+    grid-template-rows: 48px repeat(10, 68px);
+    isolation: isolate;
+  }
+  .timetable-corner, .timetable-day { text-align: center; align-self: center; font-size: 12px; }
+  .timetable-corner { color: var(--muted-foreground); font-size: 10px; }
+  .timetable-day strong, .timetable-day span { display: block; }
+  .timetable-day span { font-size: 10px; color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
+  .timetable-period { display: flex; flex-direction: column; justify-content: center; align-items: center; line-height: 1.4; border-top: 1px solid #e1e9ec; }
+  .timetable-period strong { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .timetable-period span { font-size: 8px; color: #5b7079; font-variant-numeric: tabular-nums; }
+  .timetable-cell { border-left: 1px solid #e1e9ec; border-top: 1px dashed #e1e9ec; background: rgba(255,255,255,.16); }
+  .timetable-cell.session-start { border-top: 2px solid #cfdde2; }
+  .timetable-course {
+    z-index: 1; min-width: 0; margin: 3px 2px; padding: 7px 4px;
+    display: flex; flex-direction: column; gap: 7px; justify-content: flex-start;
+    background: #e2eff7; color: #214a63; border: 1px solid #c8deed; border-radius: 9px;
+    font: inherit; text-align: left; line-height: 1.35; overflow-wrap: anywhere;
+  }
+  .timetable-course strong { font-size: 11px; font-weight: 650; }
+  .timetable-course > span { font-size: 10px; color: #456477; }
+  .timetable-course small { font-size: 9px; color: #526879; margin-top: auto; }
+  .timetable-course.science { background: #def1e9; border-color: #bcdfd1; color: #24554b; }
+  .timetable-course.science > span { color: #3c665b; }
+  .timetable-course.lab { background: #eee6f8; border-color: #d7c9ea; color: #554472; }
+  .timetable-course.lab > span { color: #69577f; }
+  .timetable-course.sport { background: #fff0d2; border-color: #e8d09b; color: #795b24; }
+  .timetable-course.sport > span { color: #806a42; }
+  .timetable-course.pending { border-style: dashed; }
+  .timetable-course:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
+  .timetable-weekend { margin: 10px 4px 0 38px; font-size: 11px; color: var(--muted-foreground); }
+  .timetable-weekend button { background: none; border: 0; color: inherit; font: inherit; text-align: left; }
   .day > header {
     flex-direction: row;
     justify-content: space-between;

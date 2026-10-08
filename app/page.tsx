@@ -23,6 +23,7 @@ import MobileNav, { type MobileView } from './mobile-nav';
 import MobileProfile, { type PersonalSummary } from './mobile-profile';
 import { flushSync } from 'react-dom';
 import { registerWeekTool } from '@/lib/webmcp';
+import MobileTimetable from './mobile-timetable';
 
 export default function Home() {
   const [week, setWeek] = useState(1);
@@ -163,6 +164,9 @@ export default function Home() {
             </Empty>
           )}
           {active.length > 0 && (
+            <MobileTimetable week={week} courses={active} />
+          )}
+          {active.length > 0 && (
             <div className="days">
               {['周一', '周二', '周三', '周四', '周五', '周六', '周日'].map(
                 (day, i) => (
@@ -188,6 +192,7 @@ export default function Home() {
                           <h4>{c.name}</h4>
                           <p>{c.room}</p>
                           <p className="teacher">{c.teacher}</p>
+                          {c.pending && <p className="teacher">板块占位 · 周次待确认</p>}
                         </article>
                       ))}
                     {!active.some((c) => c.day === i + 1) && (
@@ -201,7 +206,7 @@ export default function Home() {
           <div className="schedule-note">
             <Info size={17} />
             <p>
-              英语已计入课表：第4—19周，周三7–8节为单周视听说，周五3–4节为每周读写，均在综合楼A303。体育：周四3–4节（10:00–11:40），分班、周次及地点仍待确认。课表时间按冬季作息显示，预备铃为7:50、13:50、18:50。
+              体育板块已加入周四3–4节（10:00–11:40），暂在第4—19周显示，实际开课周次、分班、教师及地点待确认。英语沿用单独英语课表：周三7–8节单周视听说，周五3–4节每周读写，综合楼A303。时间按冬季作息显示，预备铃为7:50、13:50、18:50。
             </p>
           </div>
         </section>
@@ -220,7 +225,7 @@ export default function Home() {
               <span>02</span>
               <div>
                 <h3>第4周 · 固定课程开始</h3>
-                <p>劳动教育只安排在周五第5节。</p>
+                <p>劳动教育安排在周五第5—6节。</p>
               </div>
             </div>
             <div className="memo">
