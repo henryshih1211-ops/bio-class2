@@ -101,6 +101,7 @@ export default function Personal({
         </h2>
         <p>我的记录仅保存在当前浏览器 · 换设备不会同步</p>
       </div>
+      <p className="board-scope-note">班级待办和作业目前仅供生科2班使用；上方班级选择仅切换课表。</p>
       {error && (
         <p role="alert" className="storage-error">
           {error}

@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: '生科2班 · 本周',
-  description: '26级生物科学类2班的每周课表、个人待办与常用入口。',
+  title: '生科班级 · 本周',
+  description: '26级生物科学类班级课表，目前开放2班和3班。',
 };
 
 export default function RootLayout({
@@ -32,7 +32,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#006e63" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="生科2班" />
+        <meta name="apple-mobile-web-app-title" content="生科课表" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

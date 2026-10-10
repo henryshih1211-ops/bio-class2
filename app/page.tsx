@@ -8,7 +8,7 @@ import {
   BookOpen,
   Info,
 } from 'lucide-react';
-import { activeCourses, weekDate, currentWeek, courseTime } from '@/lib/courses';
+import { activeCourses, weekDate, currentWeek, courseTime, availableClasses, classCourses, isClassId, type ClassId } from '@/lib/courses';
 import {
   Select,
   SelectContent,
@@ -27,13 +27,24 @@ import MobileTimetable from './mobile-timetable';
 
 export default function Home() {
   const [week, setWeek] = useState(1);
+  const [classId, setClassId] = useState<ClassId>(2);
   const [mobileView, setMobileView] = useState<MobileView>('schedule');
   const [personalSummary, setPersonalSummary] =
     useState<PersonalSummary | null>(null);
   useEffect(() => setWeek(currentWeek()), []);
+  useEffect(() => {
+    try {
+      const saved = Number(localStorage.getItem('bio-class2-timetable-class-v1'));
+      if (isClassId(saved)) setClassId(saved);
+    } catch { /* 班级选择可在本次浏览中继续使用。 */ }
+  }, []);
+  const changeClass = (value: ClassId) => {
+    setClassId(value);
+    try { localStorage.setItem('bio-class2-timetable-class-v1', String(value)); } catch { /* 不影响切换课表。 */ }
+  };
   useEffect(
-    () => registerWeekTool((value) => flushSync(() => setWeek(value))),
-    [],
+    () => registerWeekTool((value, selectedClass) => flushSync(() => { setWeek(value); changeClass(selectedClass); }), classId),
+    [classId],
   );
   useEffect(() => {
     const syncHash = () => {
@@ -54,7 +65,8 @@ export default function Home() {
     setMobileView(view);
     window.scrollTo({ top: 0 });
   };
-  const active = activeCourses(week);
+  const active = activeCourses(week, classId);
+  const selectedClass = availableClasses.find(c => c.id === classId)!;
   return (
     <main className={`shell mobile-view-${mobileView}`}>
       <header className="topbar">
@@ -63,14 +75,14 @@ export default function Home() {
             <Sprout size={25} />
           </span>
           <span>
-            生科2班 <span className="brand-light">/ 本周</span>
+            {selectedClass.label} <span className="brand-light">/ 本周</span>
           </span>
         </a>
         <span className="term">2026 — 2027 · 第一学期</span>
       </header>
       <section className="intro">
         <div>
-          <p className="eyebrow">26级生物科学类2班</p>
+          <p className="eyebrow">{selectedClass.fullName}</p>
           <h1>把这一周，安排明白。</h1>
         </div>
         <div className="semester">
@@ -81,7 +93,7 @@ export default function Home() {
       <PwaInstaller />
       <div className="workspace">
         <div className="mobile-page-heading">
-          <span>26级生物科学类2班</span>
+          <span>{selectedClass.fullName}</span>
           <h1>课表</h1>
         </div>
         <section id="schedule" className="schedule panel">
@@ -106,6 +118,18 @@ export default function Home() {
                 {weekDate(week)} — {weekDate(week, 6)}
               </p>
               <p className="schedule-season">冬季作息 · 10月1日—4月30日</p>
+            </div>
+            <div className="class-picker">
+              <span>班级</span>
+              <Select value={String(classId)} onValueChange={v => { const id = Number(v); if (isClassId(id)) changeClass(id); }}>
+                <SelectTrigger aria-label="选择课表班级" className="class-select">
+                  <SelectValue>{selectedClass.label}</SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {availableClasses.map(c => <SelectItem key={c.id} value={String(c.id)}>{c.label}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              <small>仅切换课表</small>
             </div>
             <div className="week-controls">
               <button
@@ -164,7 +188,7 @@ export default function Home() {
             </Empty>
           )}
           {active.length > 0 && (
-            <MobileTimetable week={week} courses={active} />
+            <MobileTimetable key={`${classId}-${week}`} week={week} courses={active} />
           )}
           {active.length > 0 && (
             <div className="days">
@@ -206,7 +230,7 @@ export default function Home() {
           <div className="schedule-note">
             <Info size={17} />
             <p>
-              体育板块已加入周四3–4节（10:00–11:40），暂在第4—19周显示，实际开课周次、分班、教师及地点待确认。英语沿用单独英语课表：周三7–8节单周视听说，周五3–4节每周读写，综合楼A303。时间按冬季作息显示，预备铃为7:50、13:50、18:50。
+              当前课表为{selectedClass.label}。体育板块在周四3–4节（10:00–11:40），暂在第4—19周显示，实际开课周次、分班、教师及地点待确认。英语依据单独英语表：周三7–8节单周视听说，周五3–4节每周读写，{classId === 2 ? '综合楼A303，丛伟丽老师' : '综合楼A404，杜文娟老师'}。{classId === 3 && '三班植物学实验在第5—19周周六5–6节、7–8节，请查看下方周末课程。'}时间按冬季作息显示，预备铃为7:50、13:50、18:50。
             </p>
           </div>
         </section>
@@ -239,13 +263,13 @@ export default function Home() {
           <section className="panel provenance">
             <h2>关于这份课表</h2>
             <p>
-              仅包含二班相关课程，保留二班参与的合班课。未收录姓名名单、学号或团员证件。
+              当前仅展示{selectedClass.label}相关课程，保留本班参与的合班课。现开放二班、三班，其他班级尚未开放。未收录姓名名单、学号或团员证件。
             </p>
             <p className="muted">
               依据你提供的2026年9月11日学校课表及9月4日大学英语课表整理。调课与临时安排以学校最新通知为准。
             </p>
             <div className="data-label">
-              28条排课记录 · 含1条体育待定板块与1条军训
+              {classCourses[classId].length}条排课记录 · 含1条体育待定板块，另有第2—3周军训
             </div>
           </section>
         </aside>
@@ -253,7 +277,7 @@ export default function Home() {
       <Personal onSummaryChange={setPersonalSummary} />
       <MobileProfile summary={personalSummary} />
       <footer>
-        生科2班 · 本周<span>班级小站 / 第一版</span>
+        {selectedClass.label} · 本周<span>班级小站 / 第一版</span>
       </footer>
       <MobileNav active={mobileView} onChange={changeMobileView} />
     </main>

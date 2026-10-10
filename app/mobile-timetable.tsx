@@ -51,7 +51,16 @@ export default function MobileTimetable({ week, courses }: { week: number; cours
         ))}
       </div>
       <div className="timetable-weekend">
-        {weekend.length ? weekend.map(c => <button key={c.id} onClick={() => setSelected(c)}>{c.day === 6 ? '周六' : '周日'} · {c.name} · {courseTime(c.start, c.end)}</button>) : '周六、周日暂无排课'}
+        {weekend.length ? <>
+          <h3>周末课程</h3>
+          <div className="timetable-weekend-list">
+            {weekend.map(c => <button key={c.id} onClick={() => setSelected(c)}>
+              <strong>{c.day === 6 ? '周六' : '周日'} · {c.name}</strong>
+              <span>{c.start}—{c.end}节 · {courseTime(c.start, c.end)}</span>
+              <small>{shortRoom(c)}</small>
+            </button>)}
+          </div>
+        </> : '周六、周日暂无排课'}
       </div>
       <Dialog open={!!selected} onOpenChange={open => !open && setSelected(null)}>
         <DialogContent className="timetable-detail">
