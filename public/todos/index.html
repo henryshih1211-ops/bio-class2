@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#006e63"><meta name="description" content="学习、班务与生活，都有条不紊。沿用课表风格的个人待办清单。">
+  <title>我的待办 · 每天一点进展</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar panel">
+      <a class="brand" href="#all"><span class="logo" data-icon="check"></span><span>我的待办<small>每天一点进展</small></span></a>
+      <p class="nav-label">我的清单</p><nav id="desktop-nav" aria-label="清单筛选"></nav>
+      <div class="sidebar-bottom"><a class="schedule-link" href="https://henryshih1211-ops.github.io/bio-class2/" target="_blank" rel="noopener"><span data-icon="calendar"></span>打开我的课表<span data-icon="arrow"></span></a><span class="save-note"><i></i>记录保存在当前浏览器</span></div>
+    </aside>
+    <main>
+      <header class="topline"><span class="eyebrow">我的工作区</span><div><span id="today-date"></span><button class="icon-button" id="data-button" aria-label="数据备份与恢复" title="备份与恢复" data-icon="settings"></button></div></header>
+      <section class="intro"><div><h1 id="view-title">全部待办</h1><p id="view-description">把要做的事记下来，一件一件完成。</p></div><button class="primary-button new-button"><span data-icon="plus"></span>新建待办</button></section>
+      <div id="storage-error" role="alert" hidden></div>
+      <section class="progress-card panel" aria-label="今日进度"><div class="progress-icon" data-icon="leaf"></div><div class="progress-copy"><strong id="progress-title">今天，也在向前</strong><p id="progress-text"></p><div class="progress-track"><div id="progress-fill"></div></div></div><div class="progress-count"><strong id="progress-number">0</strong><span>今日已完成</span></div></section>
+      <section class="list-panel panel">
+        <div class="list-toolbar"><label class="search-field"><span data-icon="search"></span><input id="search" type="search" placeholder="搜索待办或备注" aria-label="搜索待办或备注"><kbd>/</kbd></label><select id="sort" aria-label="排序方式"><option value="created">最近添加</option><option value="due">截止日期</option><option value="priority">重要优先</option></select></div>
+        <div class="category-bar" id="categories" aria-label="分类筛选"></div>
+        <form id="quick-form" class="quick-form"><span data-icon="plus"></span><input id="quick-title" maxlength="200" placeholder="添加一件要做的事，按 Enter 保存…" aria-label="快速添加待办" autocomplete="off"><button type="submit" aria-label="添加待办" data-icon="arrow"></button></form>
+        <div class="list-heading"><span id="list-count"></span><label id="show-completed-label"><input type="checkbox" id="show-completed" checked> 显示已完成</label></div>
+        <div id="task-list"></div>
+        <div class="list-footer"><span><span data-icon="check"></span>点右侧圆圈完成，点事项编辑</span><span id="saved-label">自动保存</span></div>
+      </section>
+      <footer class="page-footer"><span>给生活留一点从容。</span><a href="https://henryshih1211-ops.github.io/bio-class2/" target="_blank" rel="noopener">我的课表 <span data-icon="arrow"></span></a></footer>
+    </main>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="快捷筛选"></nav>
+  <button class="floating-add new-button" aria-label="新建待办" data-icon="plus"></button>
+  <dialog id="editor"><form id="editor-form"><header class="dialog-header"><div><p class="eyebrow">记下一件事</p><h2 id="editor-heading">新建待办</h2></div><button type="button" class="icon-button close-dialog" aria-label="关闭" data-icon="close"></button></header><div class="form-fields"><label>待办事项<input id="task-title" required maxlength="200" placeholder="接下来要做什么？" autocomplete="off"></label><div class="form-grid"><label>分类<select id="task-category"><option>学习</option><option>班务</option><option>生活</option><option>其他</option></select></label><label>截止日期<input id="task-due" type="date"></label></div><label>备注<textarea id="task-notes" maxlength="5000" rows="4" placeholder="记下细节、材料或你的想法…"></textarea></label><label class="important-toggle"><input id="task-important" type="checkbox"><span data-icon="star"></span>设为重要事项</label></div><div class="dialog-actions"><button type="button" id="delete-task" class="danger-button" hidden>删除事项</button><button type="button" class="quiet-button close-dialog">取消</button><button type="submit" class="primary-button">保存事项</button></div></form></dialog>
+  <dialog id="data-dialog"><header class="dialog-header"><div><p class="eyebrow">我的记录</p><h2>备份与恢复</h2></div><button type="button" class="icon-button close-dialog" aria-label="关闭" data-icon="close"></button></header><div class="data-body"><p>待办自动保存在当前浏览器。换设备时，可以导出备份，再在新设备上导入。</p><button id="export-data" class="primary-button"><span data-icon="download"></span>导出待办备份</button><label class="import-button">导入备份（合并已有待办）<input id="import-data" type="file" accept="application/json,.json"></label><p class="muted">导入会合并新的事项，不会清空现有清单。</p><div class="reference-note">交互参考 <a href="https://support.apple.com/en-us/102484" target="_blank" rel="noopener">Apple 提醒事项</a>与 <a href="https://www.todoist.com/help/todoist/get-started/get-started-with-todoist-OgNNJR" target="_blank" rel="noopener">Todoist</a>，视觉沿用你的课表。</div></div></dialog>
+  <div class="toast" id="toast" role="status" hidden><span id="toast-message"></span><button id="undo-button" hidden>撤销</button></div>
+  <script src="app.js" defer></script>
+</body>
+</html>
