@@ -1,7 +1,7 @@
 {
-  "name": "生科2班 · 本周",
-  "short_name": "生科2班",
-  "description": "26级生物科学类2班的每周课表与班级小工具。",
+  "name": "生科班级 · 本周",
+  "short_name": "生科课表",
+  "description": "26级生物科学类班级课表，目前开放2班和3班。",
   "lang": "zh-CN",
   "start_url": "./",
   "scope": "./",
