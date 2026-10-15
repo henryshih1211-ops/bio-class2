@@ -1,5 +1,8 @@
 'use strict';
 // Connection secrets stay in this browser, never in public source or backup files.
+const todoOriginalApi='https://henry-shared-todos.henryshih1211.workers.dev';
+const todoRelayApi='https://henry-todo-sync-1211.netlify.app';
+const todoUsesRelay=location.origin==='https://henryshih1211-ops.github.io';
 class SharedStore {
   constructor({validate,onChange,onStatus,onNotice}) {
     Object.assign(this,{validate,onChange,onStatus,onNotice});
@@ -14,7 +17,13 @@ class SharedStore {
     const u=new URL(config.api);if(u.protocol!=='https:'&&!(u.protocol==='http:'&&['localhost','127.0.0.1'].includes(u.hostname)))throw new Error('共享服务地址需要使用 HTTPS');
     if(u.username||u.password||u.search||u.hash||u.pathname!=='/')throw new Error('请填写共享服务的主地址，不含路径或参数');
     if(!/^[a-f0-9]{64}$/.test(config.room))throw new Error('共享空间码应为部署时生成的 64 位代码');
-    return {api:u.origin,room:config.room};
+    return {api:todoUsesRelay&&u.origin===todoOriginalApi?todoRelayApi:u.origin,room:config.room};
+  }
+  cacheKeyFor(config) {
+    // Both addresses reach the same D1 space. Keep its original browser cache
+    // so unsent edits retain their operation IDs when the transport changes.
+    const api=todoUsesRelay&&config.api===todoRelayApi?todoOriginalApi:config.api;
+    return `henry-todos-shared-v2:${api}:${config.room}`;
   }
   read() {
     const raw=localStorage.getItem(this.cacheKey);if(!raw)return {tasks:[],pending:[]};
@@ -35,8 +44,8 @@ class SharedStore {
   }
   async connect(config,{resume=false}={}) {
     if(this.busy)throw new Error('正在同步，请稍后再连接');
-    if(this.active&&this.read().pending.length)throw new Error('还有修改尚未同步，请先联网同步后再切换空间');
-    const normalized=this.normalize(config),cacheKey=`henry-todos-shared-v2:${normalized.api}:${normalized.room}`;
+    const normalized=this.normalize(config),cacheKey=this.cacheKeyFor(normalized);
+    if(this.active&&cacheKey!==this.cacheKey&&this.read().pending.length)throw new Error('还有修改尚未同步，请先联网同步后再切换空间');
     const previous={config:this.config,cacheKey:this.cacheKey,active:this.active,state:this.state};
     this.config=normalized;this.cacheKey=cacheKey;
     try{
